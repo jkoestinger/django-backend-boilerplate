@@ -16,8 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from api.urls import urlpatterns as api_urls
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+
+from backend_project import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(api_urls))
-]
+] + staticfiles_urlpatterns()
