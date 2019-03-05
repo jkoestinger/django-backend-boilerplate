@@ -1,0 +1,31 @@
+version: '3.2'
+
+services:
+    backend:
+        image: django-api # Rename this to suit your image name
+        restart: always
+        environment:
+            - DB_NAME=dbname
+            - DB_USER=root
+            - DB_PASSWORD=root
+            - DB_HOST=db
+            - DB_PORT=3306
+        depends_on:
+            - db
+        ports:
+            - "80:80"
+    db:
+        image: mysql:8
+        restart: always
+        volumes:
+            - ./data:/var/lib/mysql
+        environment:
+            - MYSQL_ROOT_PASSWORD=root
+            - MYSQL_DATABASE=dbname
+            - MYSQL_USER=news_user
+            - MYSQL_PASSWORD=test
+        healthcheck:
+            test: ["CMD-SHELL", 'mysqladmin ping']
+            timeout: 2s
+            retries: 10
+        command: --default-authentication-plugin=mysql_native_password
