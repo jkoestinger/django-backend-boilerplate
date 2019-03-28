@@ -87,12 +87,12 @@ When all container are correctly initialized (letsencrypt should display a line 
 server {
     ...
 
-    location /static/ {
+    location /static/ { # Must match your STATIC_URL variable in settings.py
         include /config/nginx/proxy.conf;
         proxy_pass http://static-files/;
     }
 
-    location /media/ {
+    location /media/ { # Must match your MEDIA_URL variable in settings.py
         include /config/nginx/proxy.conf;
         proxy_pass http://media-files/;
     }
