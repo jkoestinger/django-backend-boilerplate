@@ -30,6 +30,7 @@ ALLOWED_HOSTS = ['*']
 
 AUTH_USER_MODEL = 'custom_auth.User'
 
+CSRF_TRUSTED_ORIGINS = ['localhost', 'htiteamcity.tic.heia-fr.ch']
 
 # Application definition
 

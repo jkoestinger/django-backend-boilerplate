@@ -12,13 +12,13 @@ services:
             - DB_PASSWORD=root
             - DB_HOST=db
             - DB_PORT=3306
-            - DEBUG=true
-            - DEV=false
+              # - DEBUG=true
+              # - DEV=true
         depends_on:
             - db
         volumes:
-            - static_files:/app/static
-            - media_files:/app/media
+            - ./static:/app/static
+            - ./media:/app/media
     db:
         image: mysql:8
         restart: unless-stopped
@@ -39,33 +39,30 @@ services:
         image: nginx:1.15.10-alpine
         restart: unless-stopped
         volumes:
-            - static_files:/usr/share/nginx/html:ro
+            - ./static:/usr/share/nginx/html:ro
 
     media-files:
         image: nginx:1.15.10-alpine
         restart: unless-stopped
         volumes:
-            - media_files:/usr/share/nginx/html:ro
+            - ./media:/usr/share/nginx/html:ro
     
-    # letsencrypt:
-    #     image: 'linuxserver/letsencrypt'
-    #     container_name: letsencrypt
-    #     environment:
-    #         - PUID=1000
-    #         - PGID=8000
-    #         - TZ=Europe/Zurich
-    #         - STAGING=false # Set to true when testing/setup will run
-    #         - SUBDOMAINS=
-    #         - DHLEVEL=2048
-    #         - VALIDATION=http
-    #         - EXTRA_DOMAINS=
-    #     volumes:
-    #         - ./config:/config
-    #     ports:
-    #         - 443:443
-    #         - 80:80
-    #     restart: unless-stopped
-
-volumes:
-  static_files:
-  media_files:
+    letsencrypt:
+        image: 'linuxserver/letsencrypt'
+        container_name: letsencrypt
+        environment:
+            - PUID=1000
+            - PGID=8000
+            - TZ=Europe/Zurich
+            - URL=localhost # Set your hostname here (will trigger an error if not changed)
+            - STAGING=false # Set to true when testing/setup
+            - SUBDOMAINS=
+            - DHLEVEL=2048
+            - VALIDATION=http
+            - EXTRA_DOMAINS=
+        volumes:
+            - ./config:/config
+        ports:
+            - 443:443
+            - 80:80
+        restart: unless-stopped

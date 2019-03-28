@@ -1,7 +1,7 @@
 FROM tiangolo/uwsgi-nginx:python3.7
 
 ENV DEBUG false
-ENV DEV true
+ENV DEV false
 
 COPY ./requirements.txt /app/
 RUN pip install -r requirements.txt

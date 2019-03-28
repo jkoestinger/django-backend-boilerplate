@@ -1,5 +1,9 @@
+/config/
 db.sqlite3
-data/
+/data/
+/static/
+/media/
+.git
 
 # Created by .ignore support plugin (hsz.mobi)
 ### Python template
