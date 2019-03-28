@@ -4,21 +4,24 @@ version: '3.2'
 
 services:
     backend:
-        image: django-api # Rename this to suit your image name
-        restart: always
+        image: example-api # Rename this to suit your image name
+        restart: unless-stopped
         environment:
             - DB_NAME=dbname
             - DB_USER=root
             - DB_PASSWORD=root
             - DB_HOST=db
             - DB_PORT=3306
+            - DEBUG=true
+            - DEV=false
         depends_on:
             - db
-        ports:
-            - "80:80"
+        volumes:
+            - static_files:/app/static
+            - media_files:/app/media
     db:
         image: mysql:8
-        restart: always
+        restart: unless-stopped
         volumes:
             - ./data:/var/lib/mysql
         environment:
@@ -31,3 +34,38 @@ services:
             timeout: 2s
             retries: 10
         command: --default-authentication-plugin=mysql_native_password
+
+    static-files:
+        image: nginx:1.15.10-alpine
+        restart: unless-stopped
+        volumes:
+            - static_files:/usr/share/nginx/html:ro
+
+    media-files:
+        image: nginx:1.15.10-alpine
+        restart: unless-stopped
+        volumes:
+            - media_files:/usr/share/nginx/html:ro
+    
+    # letsencrypt:
+    #     image: 'linuxserver/letsencrypt'
+    #     container_name: letsencrypt
+    #     environment:
+    #         - PUID=1000
+    #         - PGID=8000
+    #         - TZ=Europe/Zurich
+    #         - STAGING=false # Set to true when testing/setup will run
+    #         - SUBDOMAINS=
+    #         - DHLEVEL=2048
+    #         - VALIDATION=http
+    #         - EXTRA_DOMAINS=
+    #     volumes:
+    #         - ./config:/config
+    #     ports:
+    #         - 443:443
+    #         - 80:80
+    #     restart: unless-stopped
+
+volumes:
+  static_files:
+  media_files:
