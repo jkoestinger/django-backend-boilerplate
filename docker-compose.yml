@@ -1,3 +1,5 @@
+# Example file. You might want to add a frontend end image for example
+
 version: '3.2'
 
 services:
